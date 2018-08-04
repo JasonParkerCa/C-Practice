@@ -1,0 +1,19 @@
+Question1:
+
+When rolling the dice 10 times, the probability of each one came up is not clear. However, when we increased the rolling time to 1000, the probability of each number became more similar to others. When rolling the dice 100000 times, the probability of each one is almost the same as the theoretical number of 1/6. When we tried more and more times, the experimental result will become closer and closer to the theoretical one.
+
+Question2:
+
+The fraction of times the number of high rolls is equal to the number of low rolls are about 8% in the 10000 trials, which means there are about 800 hundred times in 10000 trials that the number of times the high count and the low count are equal of the 100 rolling experiment. Although the probability of low numbers and high numbers should be identical, the trial number of 100 is a little small and there is only a small chance that the high count and the low count of the dice are equal.
+
+Question3:
+
+The probability of 7 is the biggest and the ones of other numbers started to decrease whiling the absolute difference between the numbers and 7 increased. The probabilities of two numbers that have the same absolute difference with 7 are almost identical. This is because 7 has the most adding arrangements ([1+6],[2+5],[3+4],[4+3],[5+2],[6+1]), and the identical-probability pair of numbers have less adding arrangements than 7 has but the same number of arrangements. For example, 6 has 5([1,5],[2,4],[3,3],[4,2],[1,5]), and 8 also has 5([2,6],[3,5],[4,4],[5,3],[6,2]).
+
+Question4:
+
+The result showed that the probability of busting before reaching the threshold is zero before 13, and then it started to increase and rose up to about 64% when the threshold is 20. I think I should stand if my total is less than 18 because the probability of busting before reaching 18 is 40.5% which is acceptable. The probability of busting before reaching 19 is about 51%, which is a little risky.
+
+Question5:
+
+The result showed that the probability of making the right choice is about 51%, which means the most of time my method works and can lead me to the right choice. I will adjust some facts to maximize my winnings when I am applying this method. I will still bet low when the counting is negative, but I will bet middle when the counting is zero or the counting is positive but close to 0. Only the time that the counting is much bigger than 0, I will bet high to avoid losing money.

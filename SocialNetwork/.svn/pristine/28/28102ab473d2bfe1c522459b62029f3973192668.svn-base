@@ -1,0 +1,410 @@
+#include <iostream>
+#include <fstream>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include <limits.h>
+using namespace std;
+
+struct link {
+    string temp;
+    link* next;
+};
+
+string* makeArray(int arraysize, link* link){
+    string* temp = new string[arraysize];
+    for (int i=0;i<arraysize;i++){
+        temp[i]=link->temp;
+        link=link->next;
+    }
+    return temp;
+}
+
+int** doubleArray(int A, int B){
+    int** temp;
+    temp = new int*[A];
+    for (int i=0;i<A;i++){
+        temp[i] = new int[B];
+    }
+    return temp;
+}
+
+class Social{
+public:
+    Social();
+    Social(int numberofAandB);
+    Social(const Social &s);
+    Social(int numberofA, int numberofB, int** relation, int numberofRelation);
+    ~Social();
+    Social RE();
+    Social RS();
+    Social Composition(Social& s);
+    Social Inverse();
+    Social Square();
+    Social operator+(const Social &s);
+    Social operator-(const Social &s);
+    void operator=(const Social &s);
+    void print();
+    int nSetA, nSetB;
+    bool** R;
+};
+
+Social Social::RE(){
+    Social temp;
+    temp.nSetA=nSetA;
+    temp.nSetB=nSetB;
+    temp.R = R;
+    for (int i=0;i<temp.nSetA;i++){
+        temp.R[i][i]=true;
+    }
+    return temp;
+}
+
+Social Social::RS(){
+    Social temp;
+    temp.nSetA=nSetA;
+    temp.nSetB=nSetB;
+    temp.R = R;
+    for (int i=0;i<temp.nSetA;i++){
+        for (int j=0;j<nSetB;j++){
+            if (R[i][j]==true){
+                temp.R[j][i]=true;
+            }
+        }
+    }
+    return temp;
+}
+
+Social Social::Composition(Social& s){
+    Social temp;
+    temp.nSetA=nSetA;
+    temp.nSetB=nSetB;
+    temp.R = new bool*[nSetA];
+    for (int i=0;i<temp.nSetA;i++){
+        temp.R[i] = new bool[temp.nSetB];
+        for (int j=0;j<temp.nSetB;j++){
+            temp.R[i][j]=false;
+        }
+    }
+    for (int i=0;i<temp.nSetA;i++){
+        for (int j=0;j<temp.nSetB;j++){
+            if (s.R[i][j]==true){
+                for (int z=0;z<nSetB;z++){
+                    if (R[j][z]==true){
+                        temp.R[i][z]=true;
+                    }
+                }
+            }
+        }
+    }
+    return temp;
+}
+
+Social Social::Inverse(){
+    Social temp;
+    temp.nSetA=nSetA;
+    temp.nSetB=nSetB;
+    temp.R = new bool*[nSetA];
+    for (int i=0;i<temp.nSetA;i++){
+        temp.R[i] = new bool[temp.nSetB];
+        for (int j=0;j<temp.nSetB;j++){
+            temp.R[i][j]=false;
+        }
+    }
+    for (int i=0;i<temp.nSetA;i++){
+        for (int j=0;j<temp.nSetB;j++){
+            if (R[i][j]==true){
+                temp.R[j][i]=true;
+            }
+        }
+    }
+    return temp;
+}
+
+Social Social::Square(){
+    Social temp;
+    temp.nSetA=nSetA;
+    temp.nSetB=nSetB;
+    temp.R = R;
+    for (int i=0;i<temp.nSetA;i++){
+        for (int j=0;j<temp.nSetB;j++){
+            temp.R[j][i]=true;
+        }
+    }
+    return temp;
+}
+
+Social Social::operator+(const Social &s){
+    Social temp;
+    temp.nSetA=nSetA;
+    temp.nSetB=nSetB;
+    temp.R = new bool*[nSetA];
+    for (int i=0;i<temp.nSetA;i++){
+        temp.R[i] = new bool[temp.nSetB];
+        for (int j=0;j<temp.nSetB;j++){
+            if (s.R[i][j]==true||R[i][j]==true){
+                temp.R[i][j]=true;
+            }
+        }
+    }
+    return temp;
+}
+
+Social Social::operator-(const Social &s){
+    Social temp;
+    temp.nSetA=nSetA;
+    temp.nSetB=nSetB;
+    temp.R = R;
+    for (int i=0;i<temp.nSetA;i++){
+        for (int j=0;j<temp.nSetB;j++){
+            if (s.R[i][j]){
+                temp.R[i][j]=false;
+            }
+        }
+    }
+    return temp;
+}
+
+void Social::operator=(const Social &s){
+    nSetA=s.nSetA;
+    nSetB=s.nSetB;
+    R = new bool*[nSetA];
+    for (int i=0;i<nSetA;i++){
+        R[i] = new bool [nSetB];
+        for (int j=0;j<nSetB;j++){
+            R[i][j]=s.R[i][j];
+        }
+    }
+}
+
+void Social::print() {
+    for (int i=0;i<nSetA;i++){
+        for (int j=0;j<nSetB;j++){
+            if (R[i][j]==true){
+                cout << "{" << i+1 << "," << j+1 << "} ";
+            }
+        }
+    }
+    cout << endl;
+}
+
+Social::Social(){
+    R = NULL;
+    nSetA=nSetB=0;
+}
+
+Social::Social(int numberofAandB){
+    nSetA=nSetB=numberofAandB;
+    R = new bool* [nSetA];
+    for (int i=0;i<nSetA;i++){
+        R[i] = new bool [nSetB];
+        for (int j=0;j<nSetB;j++){
+            R[i][j]=false;
+        }
+    }
+}
+
+Social::Social(const Social &s){
+    nSetA=s.nSetA;
+    nSetB=s.nSetB;
+    R = new bool*[nSetA];
+    for (int i=0;i<nSetA;i++){
+        R[i] = new bool [nSetB];
+        for (int j=0;j<nSetB;j++){
+            R[i][j]=s.R[i][j];
+        }
+    }
+}
+
+Social::Social(int numberofA, int numberofB, int** relation, int numberofRelation){
+    nSetA=numberofA;
+    nSetB=numberofB;
+    R = new bool*[numberofA];
+    for (int i=0;i<numberofA;i++){
+        R[i] = new bool [numberofB];
+        for (int j=0;j<numberofB;j++){
+            R[i][j]=false;
+        }
+    }
+    for (int i=0;i<numberofRelation;i++){
+        R[relation[i][0]-1][relation[i][1]-1]=true;
+    }
+}
+
+Social::~Social(){
+    nSetA=nSetB=0;
+}
+
+Social F,W,L,U;
+int NumberofU;
+
+void getData(){
+    int valueofU = 0, valueofC = 0, valueofF = 0, valueofW = 0, valueofL = 0;
+    link* FLink = new link;
+    link* head;
+    head=FLink;
+    string temp;
+    getline(cin,temp);
+    getline(cin,temp);
+    valueofU=stoi(temp);
+    getline(cin,temp);
+    getline(cin,temp);
+    valueofC=stoi(temp);
+    getline(cin,temp);
+    int index=0, middle=0;
+    char convert[20];
+    string tempnumber;
+    getline(cin,temp);
+    while (temp!="#W"){
+        index++;
+        FLink->temp=temp;
+        getline(cin,temp);
+        if (temp!="#W"){
+            FLink->next=new link;
+            FLink=FLink->next;
+        } else {
+            FLink->next=NULL;
+        }
+    }
+    FLink=head;
+    valueofF=index;
+    string* Farray=makeArray(valueofF,FLink);
+    int** FP = doubleArray(valueofF, 2);
+    for (int i=0;i<valueofF;i++){
+        tempnumber="";
+        strcpy(convert, Farray[i].c_str());
+        for (int j=0;convert[j]!=' ';j++){
+            tempnumber+=convert[j];
+            middle=j+1;
+        }
+        FP[i][0]=stoi(tempnumber);
+        tempnumber="";
+        for (int j=middle+1;convert[j]!='\0';j++){
+            tempnumber+=convert[j];
+        }
+        FP[i][1]=stoi(tempnumber);
+    }
+    link* WLink = new link;
+    head=WLink;
+    index=0;
+    getline(cin,temp);
+    while (temp!="#L"){
+        index++;
+        WLink->temp=temp;
+        getline(cin,temp);
+        if (temp!="#L"){
+            WLink->next=new link;
+            WLink=WLink->next;
+        } else {
+            WLink->next=NULL;
+        }
+    }
+    WLink=head;
+    valueofW=index;
+    string* Warray=makeArray(valueofW,WLink);
+    int** WP = doubleArray(valueofW, 2);
+    for (int i=0;i<valueofW;i++){
+        tempnumber="";
+        strcpy(convert, Warray[i].c_str());
+        for (int j=0;convert[j]!=' ';j++){
+            tempnumber+=convert[j];
+            middle=j+1;
+        }
+        WP[i][0]=stoi(tempnumber);
+        tempnumber="";
+        for (int j=middle+1;convert[j]!='\0';j++){
+            tempnumber+=convert[j];
+        }
+        WP[i][1]=stoi(tempnumber);
+    }
+    link* LLink = new link;
+    head=LLink;
+    index=0;
+    while (getline(cin,temp)){
+        index++;
+        LLink->temp=temp;
+        if (cin){
+            LLink->next=new link;
+            LLink=LLink->next;
+        } else {
+            LLink->next=NULL;
+        }
+    }
+    LLink=head;
+    valueofL=index;
+    string* Larray=makeArray(valueofL,LLink);
+    int** LP = doubleArray(valueofL, 2);
+    for (int i=0;i<valueofL;i++){
+        tempnumber="";
+        strcpy(convert, Larray[i].c_str());
+        for (int j=0;convert[j]!=' ';j++){
+            tempnumber+=convert[j];
+            middle=j+1;
+        }
+        LP[i][0]=stoi(tempnumber);
+        tempnumber="";
+        for (int j=middle+1;convert[j]!='\0';j++){
+            tempnumber+=convert[j];
+        }
+        LP[i][1]=stoi(tempnumber);
+    }
+    if (valueofU>=valueofC){
+        valueofC=valueofU;
+    } else {
+        valueofU=valueofC;
+    }
+    Social FT = Social(valueofU,valueofU,FP,valueofF);
+    Social WT = Social(valueofU,valueofC,WP,valueofW);
+    Social LT = Social(valueofU,valueofC,LP,valueofL);
+
+    F=FT;
+    W=WT;
+    L=LT;
+
+}
+
+int main (){
+    getData();
+    cout << "F: ";
+    F.print();
+    cout << "W: ";
+    W.print();
+    cout << "L: ";
+    L.print();
+    cout << endl;
+
+    Social Fr;
+    Fr = F.RE();
+    Social Frs;
+    Frs = Fr.RS();
+    Social Lfw;
+    Lfw = L+(W.Composition(Frs));
+    Social Win;
+    Win = W.Inverse();
+    Social S;
+    S = Win.Composition(Lfw);
+    Social Us;
+    Us = U.Square();
+    U.print();
+    Social D;
+    D = S;
+
+    cout << "Fr: ";
+    Fr.print();
+    cout << "Frs: ";
+    Frs.print();
+    cout << "W.Composition(Frs): ";
+    W.Composition(Frs).print();
+    cout << "Lfw: ";
+    Lfw.print();
+    cout << "Win: ";
+    Win.print();
+    cout << "S: ";
+    S.print();
+    cout << endl;
+    cout << "D: ";
+    D.print();
+    cout << endl;
+    return 0;
+}

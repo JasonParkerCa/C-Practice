@@ -1,0 +1,6 @@
+
+all:
+	g++ -std=c++11 Social.cpp -o dis
+
+clean:
+	rm dis
